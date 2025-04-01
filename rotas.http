@@ -1,0 +1,7 @@
+POST http://[::1]:8080/postafotos''''
+Content-Type: application/json
+
+{
+    "titulo":"foto1",
+    "descrição":"primeira foto "
+}
