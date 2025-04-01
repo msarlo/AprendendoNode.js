@@ -4,12 +4,12 @@ export class DbMemory{
     #fotos = new Map();
 
     list(){
-        return this.#fotos.values();
+        return Array.from(this.#fotos.values());
     }
 
     create(foto){
 
-        const fotoId = randomUUID
+        const fotoId = randomUUID();
         this.#fotos.set(fotoId, foto);
     }
 
@@ -17,7 +17,7 @@ export class DbMemory{
         this.#fotos.set( id, foto);
     }
 
-    delete(id, foto){
+    delete(id){
         this.#fotos.delete(id);
     }
 
