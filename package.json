@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "node --watch --nowarming server.js"
+    "dev": "node --watch server.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,6 @@
   "homepage": "https://github.com/msarlo/AprendendoNode.js#readme",
   "dependencies": {
     "fastify": "^5.2.2"
-  }
+  },
+  "devDependencies": {}
 }
