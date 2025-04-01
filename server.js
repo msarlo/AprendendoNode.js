@@ -18,17 +18,16 @@ server.get('/fotos', () => {
 })
 
 server.post('/postafotos', (request, reply) => {
-    const {titulo, descrição} = request.body
+    const { titulo, descricao } = request.body;
     
-    banco.create({
+    const fotoId = banco.create({
         titulo,
-        descrição,
-    })
-    
-    console.log(banco.list())
+        descricao,
+    });
 
-    return reply.status(201).send()
-})
+    return reply.status(201).send({ id: fotoId });
+});
+
 
 server.put('/fotos/:id', () => {
     return 'Ver fotos'
