@@ -5,21 +5,29 @@ const server = Fastify();
 
 const banco = new DbMemory()
 
+
+
 server.get('/', async (request, reply) => {
-    return 'testeando';
+    return 'LILFILLGAY';
 });
 
 server.get('/fotos', () => {
-    return 'Ver fotos'
+    const fotos = banco.list();
+
+    return fotos
 })
 
-server.post('/fotos', () => {
+server.post('/postafotos', (request, reply) => {
+    const {titulo, descrição} = request.body
+    
     banco.create({
-        título: 'foto teste',
-        descrição: 'primeira foto do banco',
+        titulo,
+        descrição,
     })
     
     console.log(banco.list())
+
+    return reply.status(201).send()
 })
 
 server.put('/fotos/:id', () => {
