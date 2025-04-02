@@ -6,11 +6,13 @@ import { randomUUID } from 'crypto';
 import fs from 'fs';
 
 
-const server = Fastify();
-
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
 }
+const server = Fastify();
+
+server.register(import('@fastify/multipart'));
+
 
 //adicionando o servidor de arquivos estáticos
 server.register(import('@fastify/static'), {
@@ -22,32 +24,43 @@ server.register(import('@fastify/static'), {
 const upload = multer({ dest: 'uploads/' });
 
 // Rota de upload
-server.post('/upload', { preHandler: upload.single('foto') }, (request, reply) => {
-    const { titulo, descricao } = request.body;
-    const foto = request.file;
+server.post('/upload', async (request, reply) => {
+    const parts = request.parts(); // Captura os campos do formulário
+    let titulo = "";
+    let descricao = "";
+    let data;
 
-    if (!foto) {
+    for await (const part of parts) {
+        if (part.type === 'file') {
+            data = part; // Captura o arquivo enviado
+        } else if (part.type === 'field') {
+            if (part.fieldname === 'titulo') titulo = part.value;
+            if (part.fieldname === 'descricao') descricao = part.value;
+        }
+    }
+
+    if (!data) {
         return reply.status(400).send({ error: 'Nenhuma imagem foi enviada.' });
     }
 
     const fotoId = randomUUID();
-    const extensao = path.extname(foto.originalname);
+    const extensao = path.extname(data.filename);
     const novoNomeArquivo = `${fotoId}${extensao}`;
     const caminhoDestino = path.join('uploads', novoNomeArquivo);
 
-    fs.renameSync(foto.path, caminhoDestino);
+    // Salvar arquivo corretamente
+    await fs.promises.writeFile(caminhoDestino, await data.toBuffer());
 
-    // Salvar no banco em memória
-    const banco = new DbMemory();
-    banco.create({
-        id: fotoId,
+    return reply.status(201).send({ 
+        message: 'Upload realizado com sucesso!', 
+        id: fotoId, 
         titulo,
         descricao,
-        caminho: caminhoDestino,
+        url: `http://127.0.0.1:8080/uploads/${novoNomeArquivo}`
     });
-
-    return reply.status(201).send({ message: 'Upload realizado com sucesso!', id: fotoId, caminho: caminhoDestino });
 });
+
+
 
 server.post('/postafotos', (request, reply) => {
     const { titulo, descricao } = request.body;
