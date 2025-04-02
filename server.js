@@ -77,11 +77,15 @@ server.get('/', async (request, reply) => {
     return 'LILFILLGAY';
 });
 
-server.get('/fotos', () => {
-    const fotos = banco.list();
+server.get('/fotos', async (request, reply) => {
+    const arquivos = await fs.promises.readdir('uploads'); // Lista os arquivos da pasta uploads
 
-    return fotos
-})
+    const fotos = arquivos.map(arquivo => ({
+        url: `http://127.0.0.1:8080/uploads/${arquivo}`
+    }));
+
+    return reply.send(fotos);
+});
 
 server.put('/fotos/:id', () => {
     return 'Ver fotos'
