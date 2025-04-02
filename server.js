@@ -11,6 +11,8 @@ if (!fs.existsSync('uploads')) {
 }
 const server = Fastify();
 
+const banco = new DbMemory();
+
 server.register(import('@fastify/multipart'));
 
 
