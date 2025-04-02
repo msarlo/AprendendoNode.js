@@ -1,7 +1,17 @@
-POST http://[::1]:8080/postafotos
-Content-Type: application/json
+POST http://127.0.0.1:8080/upload
+Content-Type: multipart/form-data; boundary=boundary123
 
-{
-    "titulo":"foto1",
-    "descricao":"primeira foto "
-}
+--boundary123
+Content-Disposition: form-data; name="titulo"
+
+Minha Foto
+--boundary123
+Content-Disposition: form-data; name="descricao"
+
+Uma foto muito legal
+--boundary123
+Content-Disposition: form-data; name="foto"; filename="imagem.jpg"
+Content-Type: image/jpeg
+
+< macaco.jpg
+--boundary123--
