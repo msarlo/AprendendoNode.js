@@ -18,7 +18,10 @@ export class DbMemory{
             if(search){
                 return foto.descricao.includes(search)
             }
+
+            return true
         })
+
     }
 
     create(foto){
