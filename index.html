@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotos</title>
+</head>
+<body>
+    <h1>Minhas Fotos</h1>
+    <div id="fotos-container"></div>
+
+    <script>
+        // Requisição para buscar as imagens
+        fetch('http://127.0.0.1:8080/fotos')
+            .then(response => response.json())
+            .then(fotos => {
+                const container = document.getElementById('fotos-container');
+                fotos.forEach(foto => {
+                    // Criar o elemento de imagem
+                    const imgElement = document.createElement('img');
+                    imgElement.src = foto.url;
+                    imgElement.alt = 'Foto';
+                    imgElement.style.width = '300px';  // Tamanho da imagem
+                    imgElement.style.margin = '10px';
+
+                    // Adicionar a imagem ao contêiner
+                    container.appendChild(imgElement);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar fotos:', error));
+    </script>
+</body>
+</html>
