@@ -62,19 +62,6 @@ server.post('/upload', async (request, reply) => {
     });
 });
 
-
-
-server.post('/postafotos', (request, reply) => {
-    const { titulo, descricao } = request.body;
-    
-    const fotoId = banco.create({
-        titulo,
-        descricao,
-    });
-
-    return reply.status(201).send({ id: fotoId });
-});
-
 server.get('/', async (request, reply) => {
     return 'LILFILLGAY';
 });
